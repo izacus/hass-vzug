@@ -49,13 +49,17 @@ class VZugProgramSensor(SensorEntity):
     def native_value(self) -> str | None:
         if self._coordinator.data is None or "Program" not in self._coordinator.data:
             return None
-        return str(self._coordinator.data["Program"])
+        
+        value = str(self._coordinator.data["Program"])
+        if len(value) == 0:
+            return "None"
+        return value
 
 class VZugProgramEndSensor(SensorEntity):
 
     def __init__(self, uuid: str, coordinator,  device_info: DeviceInfo) -> None:
         self.entity_description = SensorEntityDescription(key="program_End", 
-            name = "Program End")
+            name = "Program End", native_unit_of_measurement=UnitOfTime.MINUTES)
         self._coordinator = coordinator
         self._attr_name = f"V-Zug {device_info['model']} {uuid} Program End"
         self._attr_unique_id = f"vzug_{device_info['model']}_{uuid}_program_end"
@@ -71,12 +75,15 @@ class VZugProgramEndSensor(SensorEntity):
             self._coordinator.async_add_listener(self.async_write_ha_state)
         )
 
-    def unit_of_measurement(self) -> str | None:
+    def native_unit_of_measurement(self) -> str | None:
         return UnitOfTime.MINUTES
 
     @property
     def native_value(self) -> str | None:
-        return self.get_end_minutes()
+        end_minutes = self.get_end_minutes()
+        if end_minutes is None:
+            return 0
+        return end_minutes
 
     def get_end_minutes(self):        
         if self._coordinator.data is None:

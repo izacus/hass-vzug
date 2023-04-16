@@ -1,6 +1,7 @@
 {
   "domain": "vzug",
   "name": "V-Zug",
+  "version": "1.0.0",
   "codeowners": [
     "@izacus"
   ],
