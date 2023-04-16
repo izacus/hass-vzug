@@ -75,14 +75,9 @@ class VZugProgramEndSensor(SensorEntity):
             self._coordinator.async_add_listener(self.async_write_ha_state)
         )
 
-    def native_unit_of_measurement(self) -> str | None:
-        return UnitOfTime.MINUTES
-
     @property
     def native_value(self) -> str | None:
         end_minutes = self.get_end_minutes()
-        if end_minutes is None:
-            return 0
         return end_minutes
 
     def get_end_minutes(self):        
