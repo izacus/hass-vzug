@@ -47,4 +47,4 @@ class VZugActiveSensor(BinarySensorEntity):
         """Return true if the binary sensor is on."""
         if self._coordinator.data is None or "Inactive" not in self._coordinator.data:
             return None
-        return not bool(self._coordinator.data["Inactive"])
+        return self._coordinator.data["Inactive"] == "false"
